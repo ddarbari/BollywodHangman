@@ -1,0 +1,35 @@
+CREATE TABLE `Category` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`Name`	TEXT NOT NULL,
+	`Photo`	TEXT
+);
+
+CREATE TABLE `Hint` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`QuestionId`	INTEGER NOT NULL,
+	`Hint`	TEXT
+);
+
+CREATE TABLE `Question` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`SubCatId`	INTEGER NOT NULL,
+	`Answer`	TEXT,
+	`DifficultyLevel`	INTEGER,
+	`HintType`	TEXT
+);
+
+CREATE TABLE `Subcategory` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`Name`	TEXT NOT NULL,
+	`Photo`	TEXT NOT NULL,
+	`CategoryId`	INTEGER
+);
+
+CREATE TABLE `android_metadata` (
+	`locale`	TEXT DEFAULT ''en_US''
+);
+
+CREATE TABLE `sqlite_sequence` (
+	`name`	TEXT,
+	`seq`	TEXT
+); 	
