@@ -1,45 +1,47 @@
 package com.indianhangman;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.ArrayList;
 
 import com.indianhangman.Models.Category;
-import com.indianhangnam.Dbutils.CategoryAdaptor;
-
-import android.app.ListActivity;
+import com.indianhangman.ViewAdapters.CategoryListAdaptor;
+import com.indianhangnam.Dbutils.DatabaseAdapter;
+import android.app.Activity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends Activity {
 
-	private CategoryAdaptor categories;
+	private DatabaseAdapter dbAdapter;
+	ListView catListView;
+	CategoryListAdaptor categoryAdaptor;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category);
+        dbAdapter = new DatabaseAdapter(this);
+        catListView =(ListView)findViewById(R.id.catlist);
 
-        categories = new CategoryAdaptor(this);
-      //  categories.open();
-
-        List<String> values = categories.getAllCategories();
-        
+        ArrayList<Category> categories = dbAdapter.getAllCategories();
+        categoryAdaptor = new CategoryListAdaptor(this, categories);
+        catListView.setAdapter(categoryAdaptor);
         // use the SimpleCursorAdapter to show the
         // elements in a ListView
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-            android.R.layout.simple_list_item_1, values);
-        setListAdapter(adapter);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+//            android.R.layout.simple_list_item_1, values);
+//        setListAdapter(adapter);
 
     }
 
     @Override
     protected void onResume() {
-      categories.open();
+      dbAdapter.open();
       super.onResume();
     }
 
     @Override
     protected void onPause() {
-      categories.close();
+    	dbAdapter.close();
       super.onPause();
     }
 

@@ -12,14 +12,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
-public class CategoryAdaptor {
+public class DatabaseAdapter {
 	protected static final String TAG = "CategoryAdapter";	
 	private final Context mContext;
     private SQLiteDatabase mDb;
     private DatabaseHelper mDbHelper;
     private String table_Name="Category";
+    private String queryGetAllCategories = "SELECT * FROM " + table_Name;
+    Cursor cursor;
 
-    public CategoryAdaptor(Context context) 
+    public DatabaseAdapter(Context context) 
     {
         this.mContext = context;
         mDbHelper = new DatabaseHelper(mContext);
@@ -42,32 +44,32 @@ public class CategoryAdaptor {
         mDbHelper.close();
       }
     
-    public List<String> getAllCategories() {
-    	  List<Category> record = new ArrayList<Category>();
-    	  List<String> categoryNames = new ArrayList<String>();
-    	  try {
-		   String selectQuery = "SELECT * FROM " + table_Name;
-		   Cursor cursor = mDb.rawQuery(selectQuery, null);
-		   if (cursor != null && cursor.moveToFirst()) {
-		   do
-    	    {
-    	     Category model = new Category();
-    	     model.setId(cursor.getInt(0));
-    	     model.setName(cursor.getString(1));
-    	     record.add(model);
-    	     categoryNames.add(model.getName());
-    	    } while (cursor.moveToNext());
-    	   }
-    	   return categoryNames;
-    	  } catch (SQLiteException se) {
+    public ArrayList<Category> getAllCategories() {
+    	ArrayList<Category> categories = new ArrayList<Category>();
+    	  //List<String> categoryNames = new ArrayList<String>();
+    	  try
+    	  {
+			   cursor = mDb.rawQuery(queryGetAllCategories, null);
+			   if (cursor != null && cursor.moveToFirst()) {
+			   do
+	    	    {
+	    	     Category model = new Category();
+	    	     model.setId(cursor.getInt(0));
+	    	     model.setName(cursor.getString(1));
+	    	     model.setPhoto(cursor.getString(2));
+	    	     categories.add(model);
+	    	     //categoryNames.add(model.getName());
+	    	    } while (cursor.moveToNext());
+	    	   }
+	    	   return categories;
+    	  } 
+    	  catch (SQLiteException se) 
+    	  {
     	   Log.v("DatabaseHandler getCategoryRecord Exception",
     	     Log.getStackTraceString(se));
-    	  } catch (Exception e) {
-    	   Log.v("DatabaseHandler getCategoryRecord Exception",
-    	     Log.getStackTraceString(e));
-    	  } finally {
-    	   mDb.close();
-    	  }
-    	  return categoryNames;
+    	  } 
+    	  return categories;
     	 }
+
+    
 }

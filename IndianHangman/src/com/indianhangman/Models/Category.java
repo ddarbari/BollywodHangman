@@ -5,12 +5,7 @@ public class Category {
 	int id;
 	String name;
 	String photo;
-	
-	public Category()
-	{
 		
-	}
-	
 	public int getId() {
 		return id;
 	}
